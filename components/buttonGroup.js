@@ -8,7 +8,7 @@ function ButtonGroup(props) {
       {CHOICES.map((item, index) => {
         return (
           <TouchableOpacity
-            style={styles.buttonStyle}
+            style={[styles.buttonStyle, styles.shadowStyle]}
             key={index}
             onPress={() => {
               props.onPressButton(item.name);
@@ -40,6 +40,16 @@ const styles = StyleSheet.create({
     fontSize: 25,
     color: "white",
     fontWeight: "bold",
+  },
+  shadowStyle: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 

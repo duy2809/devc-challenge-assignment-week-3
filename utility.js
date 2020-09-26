@@ -21,7 +21,7 @@ const getRoundOutcome = (userChoice, computerChoice) => {
 const getResultColor = (res) => {
   if (res === "Victory!") return "green";
   if (res === "Defeat!") return "red";
-  return "black";
+  return "darkkhaki";
 };
 
 export { randomComputerChoice, getRoundOutcome, getResultColor };

@@ -1,7 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { ButtonGroup, GameStatus, PlayerCard } from "./components/index";
+import { StyleSheet, Text, View, Image } from "react-native";
+import {
+  ButtonGroup,
+  GameStatus,
+  PlayerCard,
+  ModalPopup,
+} from "./components/index";
 import { CHOICES } from "./constants";
 import { randomComputerChoice, getRoundOutcome } from "./utility";
 
@@ -12,6 +17,10 @@ export default class App extends React.Component {
       gamePrompt: "",
       playerChoice: {},
       computerChoice: {},
+      countTime: 0,
+      won: 0,
+      lose: 0,
+      tied: 0,
     };
   }
 
@@ -23,18 +32,39 @@ export default class App extends React.Component {
       playerChoice: foundChoice,
       computerChoice,
       gamePrompt: result,
+      countTime: this.state.countTime + 1,
     });
+    if (result === "Victory!") this.setState({ won: this.state.won + 1 });
+    else {
+      if (result === "Defeat!") this.setState({ lose: this.state.lose + 1 });
+      else this.setState({ tied: this.state.tied + 1 });
+    }
   };
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.gameStatusWrapper}>
-          <GameStatus result={this.state.gamePrompt} />
+          <GameStatus
+            result={this.state.gamePrompt}
+            countTime={this.state.countTime}
+            won={this.state.won}
+            lose={this.state.lose}
+            tied={this.state.tied}
+          />
         </View>
-        <View style={styles.gamePlayerWrapper}>
+        <View style={styles.btnOpenModal}>
+          <ModalPopup
+            result={this.state.gamePrompt}
+            countTime={this.state.countTime}
+            won={this.state.won}
+            lose={this.state.lose}
+            tied={this.state.tied}
+          />
+        </View>
+        <View style={[styles.gamePlayerWrapper, styles.shadowStyle]}>
           <PlayerCard type="You" choice={this.state.playerChoice} />
-          <Text>vs</Text>
+          <Text style={{ fontSize: 24 }}>vs</Text>
           <PlayerCard type="Comp" choice={this.state.computerChoice} />
         </View>
         <View style={styles.buttonGroupWrapper}>
@@ -57,14 +87,17 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
   },
+  btnOpenModal: {
+    flex: 0.1,
+  },
   gamePlayerWrapper: {
-    flex: 0.4,
+    flex: 0.3,
     flexDirection: "row",
     margin: 10,
     borderWidth: 2,
-    paddingTop: 100,
+    paddingTop: 75,
     shadowRadius: 5,
-    paddingBottom: 100,
+    paddingBottom: 75,
     borderColor: "grey",
     shadowOpacity: 0.9,
     alignItems: "center",
@@ -72,10 +105,21 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     shadowColor: "rgba(0,0,0,0.2)",
     shadowOffset: { height: 5, width: 5 },
+    borderRadius: 15,
   },
   buttonGroupWrapper: {
     flex: 0.4,
     justifyContent: "center",
     alignItems: "center",
+  },
+  shadowStyle: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
