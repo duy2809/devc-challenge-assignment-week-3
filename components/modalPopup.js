@@ -3,9 +3,17 @@ import { Text, View, Modal, TouchableOpacity, StyleSheet } from "react-native";
 
 function ModalPopup(props) {
   const [ModalOpen, setModalOpen] = useState(false);
-  const percentWon = ((props.won / props.countTime) * 100).toFixed(2);
-  const percentLose = ((props.lose / props.countTime) * 100).toFixed(2);
-  const percentTied = ((props.tied / props.countTime) * 100).toFixed(2);
+
+  function calPercent(num, total) {
+    let res = (num / total) * 100;
+    if (Number.isInteger(res)) return res;
+    else return res.toFixed(2);
+  }
+
+  const percentWon = calPercent(props.won, props.countTime);
+  const percentLose = calPercent(props.lose, props.countTime);
+  const percentTied = calPercent(props.tied, props.countTime);
+
   return (
     <View>
       {props.countTime ? (
@@ -14,7 +22,7 @@ function ModalPopup(props) {
             onPress={() => setModalOpen(true)}
             style={[styles.btnHistory, styles.shadowStyle]}
           >
-            <Text style={{ color: "white", fontSize: 18 }}>See history</Text>
+            <Text style={styles.textBtn}>See history</Text>
           </TouchableOpacity>
 
           <Modal
@@ -24,14 +32,18 @@ function ModalPopup(props) {
             onRequestClose={() => setModalOpen(false)}
           >
             <View style={styles.container}>
-              <View style={styles.modalWrapper}>
-                <Text style={{ fontSize: 25 }}>
+              <View style={[styles.modalWrapper, styles.shadowStyle]}>
+                <Text style={{ fontSize: 30 }}>
                   Game has played: {props.countTime}
                 </Text>
-                <Text style={{ fontSize: 20 }}>
-                  <Text>
-                    Won: {props.won} Lose: {props.lose} Tied: {props.tied}
-                  </Text>
+                <Text style={{ fontSize: 25, color: "green" }}>
+                  Won: {props.won}
+                </Text>
+                <Text style={{ fontSize: 25, color: "red" }}>
+                  Lose: {props.lose}
+                </Text>
+                <Text style={{ fontSize: 25, color: "darkkhaki" }}>
+                  Tied: {props.tied}
                 </Text>
                 <View
                   style={{
@@ -39,16 +51,22 @@ function ModalPopup(props) {
                     marginTop: 15,
                   }}
                 >
-                  <Text style={{ fontSize: 23 }}>Percantage: </Text>
-                  <Text style={{ fontSize: 18 }}>Won: {percentWon} %</Text>
-                  <Text style={{ fontSize: 18 }}>Lose: {percentLose} %</Text>
-                  <Text style={{ fontSize: 18 }}>Tied: {percentTied} %</Text>
+                  <Text style={{ fontSize: 30 }}>Percantage: </Text>
+                  <Text style={{ fontSize: 25, color: "green" }}>
+                    Won: {percentWon}%
+                  </Text>
+                  <Text style={{ fontSize: 25, color: "red" }}>
+                    Lose: {percentLose}%
+                  </Text>
+                  <Text style={{ fontSize: 25, color: "darkkhaki" }}>
+                    Tied: {percentTied}%
+                  </Text>
                 </View>
                 <TouchableOpacity
-                  style={styles.btnClose}
+                  style={[styles.btnClose, styles.shadowStyle]}
                   onPress={() => setModalOpen(false)}
                 >
-                  <Text style={{ color: "white", fontSize: 18 }}>Close</Text>
+                  <Text style={styles.textBtn}>Close</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -70,8 +88,8 @@ const styles = StyleSheet.create({
   },
 
   modalWrapper: {
-    margin: 30,
-    padding: 25,
+    // flex: 0.5,
+    padding: 20,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
@@ -87,9 +105,13 @@ const styles = StyleSheet.create({
 
   btnHistory: {
     backgroundColor: "#008CBA",
-    marginTop: 10,
     padding: 10,
     borderRadius: 5,
+  },
+
+  textBtn: {
+    color: "white",
+    fontSize: 18,
   },
 
   shadowStyle: {

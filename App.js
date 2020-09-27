@@ -83,12 +83,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#e9ebee",
   },
   gameStatusWrapper: {
-    flex: 0.2,
+    flex: 0.175,
     justifyContent: "flex-end",
     alignItems: "center",
   },
   btnOpenModal: {
-    flex: 0.1,
+    flex: 0.125,
+    justifyContent: "center",
+    alignItems: "center",
   },
   gamePlayerWrapper: {
     flex: 0.3,
